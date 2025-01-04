@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-// Styled components
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
@@ -44,7 +43,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-function CityForm({ onAdd }) {
+function CityForm({ onAdd, cityToEdit, onEdit }) {
   const [formData, setFormData] = useState({
     name: '',
     population: '',
@@ -53,6 +52,19 @@ function CityForm({ onAdd }) {
     language: '',
     flag: '',
   });
+
+  useEffect(() => {
+    if (cityToEdit) {
+      setFormData({
+        name: cityToEdit.name,
+        population: cityToEdit.population,
+        capital: cityToEdit.capital,
+        continent: cityToEdit.continent,
+        language: cityToEdit.language,
+        flag: cityToEdit.flag,
+      });
+    }
+  }, [cityToEdit]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -64,23 +76,27 @@ function CityForm({ onAdd }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    fetch("http://localhost:3000/countries", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((data) => onAdd(data));
-      setFormData({
-        name: '',
-        population: '',
-        capital: '',
-        continent: '',
-        language: '',
-        flag: '',
-      });
+    if (cityToEdit) {
+      fetch(`http://localhost:3000/countries/${cityToEdit.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((res) => res.json())
+        .then((data) => onEdit(data));
+    } else {
+      fetch("http://localhost:3000/countries", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((res) => res.json())
+        .then((data) => onAdd(data));
+    }
   }
 
   return (
@@ -91,7 +107,7 @@ function CityForm({ onAdd }) {
       <Input type="text" placeholder="Continent" name="continent" value={formData.continent} onChange={handleChange} />
       <Input type="text" placeholder="Language" name="language" value={formData.language} onChange={handleChange} />
       <Input type="text" placeholder="Flag URL" name="flag" value={formData.flag} onChange={handleChange} />
-      <SubmitButton type="submit">Add Country</SubmitButton>
+      <SubmitButton type="submit">{cityToEdit ? 'Update Country' : 'Add Country'}</SubmitButton>
     </FormContainer>
   );
 }
