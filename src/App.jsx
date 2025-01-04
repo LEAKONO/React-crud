@@ -40,9 +40,10 @@ function App() {
 
   return (
     <div>
+      <h2>This is Simple Crud in React</h2>
       <Search setSearch={setSearch} />
-      <CityForm onAdd={handleAdd} />
       <CityList filteredCities={filteredCities} onDelete={handleDelete} />
+      <CityForm onAdd={handleAdd} />
     </div>
   );
 }
