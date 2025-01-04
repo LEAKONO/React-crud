@@ -2,7 +2,6 @@ import React from 'react';
 import City from './City';
 import styled from 'styled-components';
 
-// Styled component for the CityList container
 const CityListContainer = styled.div`
   margin: 20px;
   padding: 20px;
