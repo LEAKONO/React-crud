@@ -1,11 +1,11 @@
 import React from 'react'
-import City from './components/City'
+import City from './City'
 
-function CityList() {
+function CityList({filteredCities,onDelete}) {
   return (
     <>
     <div>CityList</div>
-    <City/>
+    <City filteredCities={filteredCities} onDelete={onDelete}/>
     </>
   )
 }

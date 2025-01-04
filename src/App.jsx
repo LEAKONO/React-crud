@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import React from 'react'
 import CityForm from './components/CityForm'
-import Search from 'components/Search'
+import Search from './components/Search'
 import CityList from './components/CityList'
 
 
